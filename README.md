@@ -57,7 +57,7 @@ FX5U_conveyor_compiled.gx3         輸送帶範例，GX 編譯後（Error 0 / Wa
 FX5U_輸送帶計數推料_範例程式.md      輸送帶範例程式規格
 HANDOFF_GX3Editor.md               格式解碼與 GUI 驅動的完整筆記
 tools/                             gx3gen / gx3comp / build.ps1 等工具
-gx3_tests/                         早期實驗；S_samples.gx3 是 GX 手打的編碼參考
+gx3_tests/S_samples.gx3            在 GX 手打的參考 rung（編碼對照基準）
 ```
 
 ## 限制

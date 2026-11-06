@@ -2,7 +2,8 @@
 MIL text, per-instruction step sizes and machine code.
 
 All encodings were read from a program that GX Works3 1.007H compiled itself
-(FX5U_conveyor.gx3, 2026-11-06). Anything not seen there raises an error.
+(the conveyor program, 2026-11-06; FX5U_conveyor_compiled.gx3 has the same code).
+Anything not seen there raises an error.
 """
 import re
 
