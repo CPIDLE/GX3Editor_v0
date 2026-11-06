@@ -40,6 +40,12 @@ python -I tools\conveyor.py TEST_0.gx3 out.gx3
 powershell -ExecutionPolicy Bypass -File tools\build.ps1 [-Spec tools\conveyor.py] [-Name FX5U_conveyor] [-Base TEST_0.gx3]
 ```
 
+把 rung 清單畫成 ASCII 階梯圖：
+
+```powershell
+python -I tools\gx3ascii.py [tools\conveyor.py]
+```
+
 新程式：仿照 `tools/conveyor.py` 寫一份 rung 清單 `R`，呼叫 `write_project(base, dst, R, tmpdir)`。尚未支援的指令，先在 GX 手打一個範例 rung、存檔，再讀出 LDDB 找出編碼。
 
 ## 專案結構

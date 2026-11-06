@@ -7,6 +7,7 @@
 - `tools/gx3gen.py` — rung 模型 `(branches, series, outputs)` → LDDB 文字；`write_project(base, dst, rungs, tmpdir)` 寫出 `.gx3`
 - `tools/gx3comp.py` — rung 模型 → MIL 文字、step 數、機器碼（import gx3gen 的 `dev`、`output_spec`）
 - `tools/conveyor.py` — 輸送帶範例 rung 清單 `R`，也是新程式的寫法範本
+- `tools/gx3ascii.py` — rung 清單 → ASCII 階梯圖（用 ast 讀 spec 的 `R`，不執行 spec）
 - `tools/build.ps1` — 產生 → 啟動 GX → Rebuild All → 存檔 → 讀 `Progress.txt` 回報
 - `tools/verify_comp.py` / `tools/selfcompile_patch.py` — 編譯器驗證與自編譯實驗
 - 資料流：rung 清單 → gx3gen 寫 `*_LDDB.db`（`translated=0`）→ GX Rebuild All 重建其餘檔案

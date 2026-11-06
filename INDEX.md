@@ -31,3 +31,4 @@
 | tools/verify_comp.py | 驗證 gx3comp 輸出與 GX 逐位元組相同 | active | 2026-11-06 | — |
 | tools/selfcompile_patch.py | 不經 GX 修補單一 rung 的自編譯實驗 | one-off | 2026-11-06 | — |
 | .gitignore | 擋 settings.local.json、金鑰、__pycache__ | active | 2026-11-06 | — |
+| tools/gx3ascii.py | rung 清單 → ASCII 階梯圖（讀 spec 不執行） | active | 2026-11-06 | — |
