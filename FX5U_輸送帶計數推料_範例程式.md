@@ -166,8 +166,9 @@
 1. GX Works3 新建專案：系列 FX5CPU、機種 FX5U、語言「梯形圖」。
 2. 開啟 `MAIN > ProgPou > Program`，依第 4 節逐列輸入，完成後按 **F4 轉換**。
 3. 軟元件註解：開啟「Device > Device Comment」，把下方表格從 Excel 複製貼上（兩欄：軟元件、註解）。
-4. 沒有實機時可用 **GX Simulator3**（Debug > Simulation > Start Simulation）模擬，在「Device/Buffer Memory Batch Monitor」或「Modify Value」中強制 X 元件 ON/OFF 測試。
-   - 注意：模擬時 X1、X2、X6（NC 接點）需先手動設成 ON，否則安全條件不成立，無法啟動。
+   - 也可直接開啟已轉換好的 `FX5U_conveyor_compiled.gx3`，跳過步驟 1–2。
+4. 在實機測試：寫入 PLC 後切到 RUN，用監看模式（Online > Monitor）或「Device/Buffer Memory Batch Monitor」觀察軟元件，以實際的按鈕／感測器（或接線端子上的開關）操作 X 輸入。不使用模擬（GX Works3 1.007H 無法模擬 FX5）。
+   - 注意：X1、X2、X6 是 NC 接點，必須接上（正常時 ON），否則安全條件不成立，無法啟動。
 
 建議測試順序：
 
@@ -220,4 +221,4 @@ D10	累計產量
 - 計時器與計數器的寫法（`OUT T` 為 100 ms 計時器，另有 `OUTH T` 10 ms、`OUT ST` 累計型；`OUT C` 16 位元、`OUT LC` 32 位元）依三菱 iQ-F 產品頁。
 - SM400／SM402／SM412 的定義依 MELSEC 共通的特殊繼電器編號，本次網路搜尋未找到 FX5 手冊原文頁；正式使用前請以《MELSEC iQ-F FX5 用戶手冊（應用篇）》特殊繼電器一覽確認。
 - 指令細節以《MELSEC iQ-F FX5 編程手冊（指令/通用 FUN/FB 篇）》為準。
-- 本程式未在 GX Works3 實際轉換驗證。
+- 本程式已於 2026-11-06 在 GX Works3 1.007H 轉換（Rebuild All）：Error 0 / Warning 0，163 steps（`FX5U_conveyor_compiled.gx3`）；尚未在實機 PLC 上執行驗證。
