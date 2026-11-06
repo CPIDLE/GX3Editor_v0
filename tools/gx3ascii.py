@@ -8,6 +8,7 @@ usage: python -I tools/gx3ascii.py [SPEC.py]   (default: tools/conveyor.py)
 import ast
 import os
 import sys
+import unicodedata
 
 CELL = 9  # width of one contact: '───┤ ├───'
 
@@ -102,14 +103,43 @@ def render_rung(rung, x_out, width):
     return out
 
 
+def dw(s):
+    """Display width: CJK wide/fullwidth characters take two columns."""
+    return sum(2 if unicodedata.east_asian_width(ch) in 'WF' else 1 for ch in s)
+
+
+def text_line(text, width):
+    return text + ' ' * (width - 1 - dw(text)) + '│'
+
+
+def comment_lines(comment, width):
+    """'title | note1、note2' -> a title line and wrapped note lines inside the rails."""
+    title, _, note = (p.strip() for p in comment.partition('|'))
+    lines = [text_line('│ ' + title, width)] if title else []
+    if note:
+        first, rest = '│   註：', '│       '
+        cur = first
+        for i, item in enumerate(note.split('、')):
+            piece = item if i == 0 else '、' + item
+            if cur not in (first, rest) and dw(cur + piece) > width - 2:
+                lines.append(text_line(cur, width))
+                cur = rest + piece.lstrip('、')
+            else:
+                cur += piece
+        lines.append(text_line(cur, width))
+    return lines
+
+
 def render(rungs):
     x_out = max(content_end(r) for r, _ in rungs) + 2
     width = x_out + 1 + max(len(output_box(o)) for r, _ in rungs for o in r[2]) + 6
     lines = []
-    for rung, note in rungs:
-        # the spec comment ("4 run self-hold") opens a section; uncommented rungs continue it
-        head = '│ ' + note if note else '│'
-        lines.append(head + ' ' * (width - 1 - len(head)) + '│')
+    for rung, comment in rungs:
+        # a comment with a title opens a rung group; one without (or no comment) continues it
+        if not comment.split('|')[0].strip():
+            lines.append(text_line('│', width))
+        if comment:
+            lines.extend(comment_lines(comment, width))
         lines.extend(render_rung(rung, x_out, width))
     end = '──[ END ]'
     lines.append('│' + ' ' * (width - 2) + '│')
