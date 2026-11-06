@@ -7,11 +7,11 @@ GX Works3 elements drawn (names as in the GX Works3 Operating Manual):
 - device comment: drawn under each contact / coil / instruction, wrapped at 8 columns, up to 4 lines
   (for an instruction, the comment of its destination for MOV, otherwise its first device)
 
-The spec file (e.g. tools/conveyor.py) is read with ast, not executed, so its write_project call does
+The spec file (e.g. programs/conveyor/conveyor.py) is read with ast, not executed, so its write_project call does
 not run. It provides R = [(branches, series, outputs), ...] as in gx3gen, optional line statements as
 trailing comments ("# <title> | <line>、<line>"), and an optional device comment dict DC.
 
-usage: python -I tools/gx3ascii.py [SPEC.py]   (default: tools/conveyor.py)
+usage: python -I tools/gx3ascii.py [SPEC.py]   (default: programs/conveyor/conveyor.py)
 """
 import ast
 import os
@@ -242,6 +242,7 @@ def render(rungs, dc):
 
 
 if __name__ == '__main__':
-    spec = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), 'conveyor.py')
+    spec = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), '..', 'programs', 'conveyor', 'conveyor.py')
     sys.stdout.reconfigure(encoding='utf-8')
     print(render(*load_spec(spec)))

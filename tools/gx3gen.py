@@ -1,7 +1,7 @@
 """Generate GX Works3 (FX5U) ladder blocks in the LDDB text format.
 
 Encodings verified against blocks that GX Works3 1.007H itself saved
-(gx3_tests/S_samples.gx3, 2026-11-06).
+(reference/S_samples.gx3, 2026-11-06).
 
 Rung model:
   branches: list of contact rows OR-ed together at the left, each a list of

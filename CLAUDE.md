@@ -1,15 +1,16 @@
 # GX3Editor_v0
 
-讀取、產生、編輯與編譯 GX Works3（FX5U）`.gx3` 專案檔，免在 GX 裡逐格手打。格式解碼與 GUI 驅動細節見 `HANDOFF_GX3Editor.md`。
+讀取、產生、編輯與編譯 GX Works3（FX5U）`.gx3` 專案檔，免在 GX 裡逐格手打。格式解碼與 GUI 驅動細節見 `docs/gx3-format-notes.md`。
 
 ## 架構與核心模組
 
 - `tools/gx3gen.py` — rung 模型 `(branches, series, outputs)` → LDDB 文字；`write_project(base, dst, rungs, tmpdir)` 寫出 `.gx3`
 - `tools/gx3comp.py` — rung 模型 → MIL 文字、step 數、機器碼（import gx3gen 的 `dev`、`output_spec`）
-- `tools/conveyor.py` — 輸送帶範例 rung 清單 `R`，也是新程式的寫法範本
-- `tools/gx3ascii.py` — rung 清單 → ASCII 階梯圖（用 ast 讀 spec 的 `R`，不執行 spec）
-- `tools/build.ps1` — 產生 → 啟動 GX → Rebuild All → 存檔 → 讀 `Progress.txt` 回報
+- `programs/<程式>/` — 每個 PLC 程式一個資料夾：spec（`.py`，rung 清單 `R`、軟元件註解 `DC`、行間聲明）、規格文件、產出的 `.gx3`。範本是 `programs/conveyor/conveyor.py`（它把 `../../tools` 加進 `sys.path`）
+- `tools/gx3ascii.py` — rung 清單 → GX 樣式 ASCII 階梯圖（用 ast 讀 spec 的 `R`/`DC`，不執行 spec）
+- `tools/build.ps1` — 產生 → 啟動 GX → Rebuild All → 存檔 → 讀 `Progress.txt` 回報；輸出寫在 spec 所在資料夾
 - `tools/verify_comp.py` / `tools/selfcompile_patch.py` — 編譯器驗證與自編譯實驗
+- `templates/TEST_0.gx3` 基底範本；`reference/S_samples.gx3` GX 手打的編碼參考
 - 資料流：rung 清單 → gx3gen 寫 `*_LDDB.db`（`translated=0`）→ GX Rebuild All 重建其餘檔案
 
 ## Build / Test
@@ -22,6 +23,9 @@ true
 
 # 產生 + GX 編譯（GX 須先關閉）
 powershell -ExecutionPolicy Bypass -File tools\build.ps1
+
+# 編譯器與 GX 輸出比對（先把 compiled .gx3 解壓到 <dir>；entry 名稱是反斜線，7-Zip 會失敗，用 Python zipfile）
+python -I tools/verify_comp.py <dir> programs/conveyor
 ```
 
 ## 反直覺的坑
@@ -34,7 +38,8 @@ powershell -ExecutionPolicy Bypass -File tools\build.ps1
 - `.ps1` 只能用 ASCII（PS 5.1 把無 BOM 的 UTF-8 當 ANSI）；按鈕用 `*(Y)*` 比對。
 - 不用 GX 模擬（1.007H 不支援 FX5，使用者也說不要用）。
 - 交檔前要關閉 GX；使用者說「先暫停」立即停止 GUI 操作。
-- `TEST_0.gx3` 是基底範本，不要修改。
+- `templates/TEST_0.gx3` 是基底範本，不要修改。
+- `verify_comp.py` 把 spec 在第一個 `write_project(` 處切開後 exec；spec 不能在呼叫前多出 `if __name__` 之類的區塊。
 
 ---
 

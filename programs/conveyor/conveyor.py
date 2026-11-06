@@ -1,5 +1,5 @@
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'tools'))
 from gx3gen import write_project
 # Device comments (same as section 6 of the spec); drawn by gx3ascii.py under each device.
 DC = {

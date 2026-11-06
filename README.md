@@ -28,37 +28,37 @@
 
 ### 使用方式
 
+以下指令都在專案根目錄執行。
+
 只產生未轉換的專案（不需 GX）：
 
 ```powershell
-python -I tools\conveyor.py TEST_0.gx3 out.gx3
+python -I programs\conveyor\conveyor.py templates\TEST_0.gx3 out.gx3
 ```
 
-產生並由 GX 編譯（執行前先關閉 GX Works3，執行約 30 秒間請勿操作滑鼠鍵盤）：
+產生並由 GX 編譯（執行前先關閉 GX Works3，執行約 30 秒間請勿操作滑鼠鍵盤）。輸出寫在 spec 所在的資料夾：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools\build.ps1 [-Spec tools\conveyor.py] [-Name FX5U_conveyor] [-Base TEST_0.gx3]
+powershell -ExecutionPolicy Bypass -File tools\build.ps1 [-Spec programs\conveyor\conveyor.py] [-Name FX5U_conveyor] [-Base templates\TEST_0.gx3]
 ```
 
-把 rung 清單畫成 ASCII 階梯圖：
+把 rung 清單畫成 GX 樣式的 ASCII 階梯圖：
 
 ```powershell
-python -I tools\gx3ascii.py [tools\conveyor.py]
+python -I tools\gx3ascii.py [programs\conveyor\conveyor.py]
 ```
 
-新程式：仿照 `tools/conveyor.py` 寫一份 rung 清單 `R`，呼叫 `write_project(base, dst, R, tmpdir)`。尚未支援的指令，先在 GX 手打一個範例 rung、存檔，再讀出 LDDB 找出編碼。
+新程式：在 `programs/<程式名>/` 建資料夾，仿照 `programs/conveyor/conveyor.py` 寫 rung 清單 `R`（可加軟元件註解 `DC` 與行間聲明），再用 `build.ps1 -Spec programs\<程式名>\<程式名>.py -Name <名稱>` 產生。尚未支援的指令，先在 GX 手打一個範例 rung、存檔，再讀出 LDDB 找出編碼。
 
 ## 專案結構
 
-```
-TEST_0.gx3                         產生用的基底範本（勿修改）
-FX5U_conveyor_uncompiled.gx3       輸送帶範例，未轉換
-FX5U_conveyor_compiled.gx3         輸送帶範例，GX 編譯後（Error 0 / Warning 0）
-FX5U_輸送帶計數推料_範例程式.md      輸送帶範例程式規格
-HANDOFF_GX3Editor.md               格式解碼與 GUI 驅動的完整筆記
-tools/                             gx3gen / gx3comp / build.ps1 等工具
-gx3_tests/S_samples.gx3            在 GX 手打的參考 rung（編碼對照基準）
-```
+| 路徑 | 內容 |
+|---|---|
+| `tools/` | gx3gen（產生）、gx3comp（編譯器）、gx3ascii（階梯圖）、build.ps1（一鍵 build）、verify_comp、selfcompile_patch |
+| `programs/conveyor/` | 輸送帶範例：`conveyor.py`（rung 清單）、規格文件、未轉換與 GX 編譯後的 `.gx3`（Error 0 / Warning 0） |
+| `templates/TEST_0.gx3` | 產生用的基底範本（勿修改） |
+| `reference/S_samples.gx3` | 在 GX 手打的參考 rung（編碼對照基準） |
+| `docs/gx3-format-notes.md` | 格式解碼、工具、GUI 驅動的技術筆記 |
 
 ## 限制
 

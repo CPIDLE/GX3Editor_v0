@@ -3,20 +3,21 @@ Build a GX Works3 project from a rung spec in two versions:
   <Name>_uncompiled.gx3  ladder written by tools\gx3gen.py, not converted
   <Name>_compiled.gx3    same file after GX Works3 "Rebuild All" + save
 Then reads ConvertData\Progress.txt from the saved file to report errors.
+Both files are written next to the spec (programs\<program>\).
 
-Usage:  powershell -ExecutionPolicy Bypass -File tools\build.ps1 [-Spec tools\conveyor.py] [-Name FX5U_conveyor] [-Base TEST_0.gx3]
+Usage:  powershell -ExecutionPolicy Bypass -File tools\build.ps1 [-Spec programs\conveyor\conveyor.py] [-Name FX5U_conveyor] [-Base templates\TEST_0.gx3]
 Do not touch the mouse/keyboard while GX Works3 is being driven (~30 s).
 #>
 param(
-    [string]$Spec = "$PSScriptRoot\conveyor.py",
+    [string]$Spec = "$PSScriptRoot\..\programs\conveyor\conveyor.py",
     [string]$Name = 'FX5U_conveyor',
-    [string]$Base = "$PSScriptRoot\..\TEST_0.gx3",
+    [string]$Base = "$PSScriptRoot\..\templates\TEST_0.gx3",
     [string]$Exe  = 'C:\Program Files (x86)\MELSOFT\GPPW3\GXW3.exe'
 )
 $ErrorActionPreference = 'Stop'
-$root = Resolve-Path "$PSScriptRoot\.."
-$uncompiled = Join-Path $root "${Name}_uncompiled.gx3"
-$compiled   = Join-Path $root "${Name}_compiled.gx3"
+$outdir = Split-Path -Parent (Resolve-Path $Spec)
+$uncompiled = Join-Path $outdir "${Name}_uncompiled.gx3"
+$compiled   = Join-Path $outdir "${Name}_compiled.gx3"
 
 if (Get-Process GXW3 -ErrorAction SilentlyContinue) { throw 'GX Works3 is already running. Close it first.' }
 
