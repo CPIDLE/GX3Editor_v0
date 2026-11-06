@@ -1,7 +1,19 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gx3gen import write_project
-# Rung comments are drawn by gx3ascii.py: "# <title> | <note>"; a comment with only "| <note>" continues the rung group above.
+# Device comments (same as section 6 of the spec); drawn by gx3ascii.py under each device.
+DC = {
+ 'X0': '啟動按鈕', 'X1': '停止按鈕(NC)', 'X2': '緊急停止(NC)', 'X3': '產品光電感測器', 'X4': '推料前限',
+ 'X5': '推料原點', 'X6': '馬達過載(NC)', 'X7': '異常復歸',
+ 'Y0': '輸送帶馬達', 'Y1': '推料電磁閥', 'Y2': '運轉燈', 'Y3': '異常燈', 'Y4': '蜂鳴器', 'Y5': '批次完成燈',
+ 'M0': '系統運轉中', 'M1': '安全條件OK', 'M10': '產品計數脈衝', 'M20': '批次完成推料中',
+ 'M30': '異常_卡料', 'M31': '異常_馬達過載', 'M32': '異常_推料逾時', 'M39': '任一異常',
+ 'T0': '卡料偵測5秒', 'T1': '推出保持1秒', 'T2': '推料逾時3秒', 'C0': '產品計數',
+ 'D0': '完成批次數', 'D1': '目前批次計數', 'D10': '累計產量',
+ 'SM400': '常時ON', 'SM402': 'RUN後首次掃描', 'SM412': '1秒時脈',
+}
+# Line statements, drawn by gx3ascii.py above each rung: "# <title> | <line>、<line>"; a comment with only
+# "| ..." continues the rung group above.
 R = [  # (OR branches, series contacts, outputs)  -- FX5U_輸送帶計數推料_範例程式.md
  ([['SM402']], [], ['RST M20', 'RST C0', 'ZRST M30 M32']),   # 列 1：開機初始化
  ([['X2']], ['X6'], ['M1']),                                   # 列 2：安全條件 | X2 急停正常、X6 過載正常
